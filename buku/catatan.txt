@@ -1,0 +1,3 @@
+Sesuaikan nama db pada buku/settings.py
+
+link untuk menjalankan http://localhost:8000/books/

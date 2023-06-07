@@ -1,0 +1,85 @@
+{% load staticfiles%}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		BUKU
+	</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<style>
+	table, th, td {
+  border:1px solid black;
+}
+</style>
+<body>
+	<form method="POST" id='myForm' name="myForm"  action="{% url 'books:simpanbuku' %}" alt="{% url 'books:editbuku' %}">
+
+		{% csrf_token %}
+		<label class="form-label">ID Buku</label>
+		<input type="text" class="form-control" id="id" name="id" value="{{idnya}}">
+		<label class="form-label">Judul Buku</label>
+		<input type="text" class="form-control" id="judul" name="judul" value="{{judulbuku}}">
+		<label class="form-label">Deskripsi</label>
+		<input type="text" class="form-control" id="deskripsi" name="deskripsi" value="{{deskripsi}}">
+		<label class="form-label">Kategori</label>
+		<input type="text" class="form-control" id="kategori" name="kategori" value="{{kategori}}">
+		<label class="form-label">Keyword</label>
+		<input type="text" class="form-control" id="keyword" name="keyword" value="{{keyword}}">
+		<label class="form-label">Harga</label>
+		<input type="text" class="form-control" id="harga" name="harga" value="{{harga}}">
+		<label class="form-label">Penerbit</label>
+		<input type="text" class="form-control" id="penerbit" name="penerbit" value="{{penerbit}}">
+		<button id="btn_simpan" value="simpan">
+			Submit
+		</button>
+	</form>
+		<table style="width:100%">
+			<tr>
+				<th>Judul</th>
+				<th>Deskripsi</th>
+				<th>Kategori</th>
+				<th>Keyword</th>
+				<th>Harga</th>
+				<th>Penerbit</th>
+				<th>aksi</th>
+			</tr>
+			{% for dt in hasil %}
+			<tr>
+				<td>{{dt.judulbuku}}</td>
+				<td>{{dt.deskripsi}}</td>
+				<td>{{dt.kategori}}</td>
+				<td>{{dt.keyword}}</td>
+				<td>{{dt.harga}}</td>
+				<td>{{dt.penerbit}}</td>
+				<td>
+					<button onclick="editbuku(this)" alt="{% url 'books:ambilbuku' %}?id_user={{dt.id_buku}}">
+						<i>Edit</i>
+					</button>
+					<button id="deletebuku" onclick="deletebuku(this)" alt="{% url 'books:deletebuku' %}" idnya="{{dt.id_buku}}">
+						<i>Delete</i>
+					</button>
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+	<script type="text/javascript">
+		$('#btn_simpan').click(function() {
+			var frm = $('#myForm')
+			var link = frm.attr('action')
+			console.log(frm.serialize())
+			$.ajax({
+				headers: { "X-CSRFToken": csrf_token },
+				url: link,
+				type: "POST",
+				data: frm.serialize(),
+				dataType: "html",
+				success: function (data) {
+					window.location.reload()
+				}
+			});
+		});
+	</script>
+<script src="{% static 'main.js' %}"></script>
+</body>
+</html>
